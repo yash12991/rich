@@ -198,8 +198,11 @@ class Text(JupyterMixin):
     def __getitem__(self, slice: Union[int, slice]) -> "Text":
         def get_text_at(offset: int) -> "Text":
             _Span = Span
+            character = self.plain[offset]
+            if offset < 0:
+                offset += len(self.plain)
             text = Text(
-                self.plain[offset],
+                character,
                 spans=[
                     _Span(0, 1, style)
                     for start, end, style in self._spans

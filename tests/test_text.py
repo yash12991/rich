@@ -993,6 +993,18 @@ def test_slice():
     text = Text.from_markup("[red]foo [bold]bar[/red] baz[/bold]")
     assert text[0] == Text("f", spans=[Span(0, 1, "red")])
     assert text[4] == Text("b", spans=[Span(0, 1, "red"), Span(0, 1, "bold")])
+    assert text[-1] == Text("z", spans=[Span(0, 1, "bold")])
+    assert text[-7] == Text("b", spans=[Span(0, 1, "red"), Span(0, 1, "bold")])
+    assert text[-11] == Text("f", spans=[Span(0, 1, "red")])
+
+    # Equivalence between positive and negative indexing
+    for i in range(len(text)):
+        assert text[i] == text[i - len(text)]
+
+    with pytest.raises(IndexError):
+        _ = text[-12]
+    with pytest.raises(IndexError):
+        _ = text[11]
 
     assert text[:3] == Text("foo", spans=[Span(0, 3, "red")])
     assert text[:4] == Text("foo ", spans=[Span(0, 4, "red")])
